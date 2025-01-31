@@ -16,5 +16,5 @@ type Traveler {
 }
 
 type Query {
-  allTravelers: [Traveler]
+  allTravelers(overAge: Int!): [Traveler]
 }

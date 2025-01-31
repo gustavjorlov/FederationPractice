@@ -5,40 +5,42 @@ import { startStandaloneServer } from "npm:@apollo/server@4.1/standalone";
 import { parse } from "npm:graphql@16.6";
 import { addMocksToSchema } from "npm:@graphql-tools/mock";
 import { makeExecutableSchema } from "npm:@graphql-tools/schema";
-import { Traveler, travelers } from "./resolvers.ts";
+import { Traveler } from "./resolvers.ts";
+import {
+  spy,
+  assertSpyCalls,
+  assertSpyCall,
+} from "https://deno.land/std@0.224.0/testing/mock.ts";
 
 const decoder = new TextDecoder("utf-8");
 const fileData = Deno.readFileSync("schema.graphql");
 const typeDefs = parse(decoder.decode(fileData));
 
-const resolvers = {
-  Query: {
-    allTravelers: () => travelers,
-  },
-};
-
 Deno.test("returns travelers names", async () => {
   const NAME = "Gustav";
+  const spyableFunctions = {
+    getTravelersFromDb: () => [{ id: 2, name: NAME }],
+  };
+  const travelersFromDBSpy = spy(spyableFunctions, "getTravelersFromDb");
   const mocks = {
     Query: () => ({
-      allTravelers: () => [{ id: 2, name: NAME }],
+      allTravelers: spyableFunctions.getTravelersFromDb,
     }),
   };
   const testServer = new ApolloServer({
     schema: addMocksToSchema({
       schema: buildSubgraphSchema({
         typeDefs,
-        resolvers,
       }),
       mocks,
     }),
   });
 
   const response = await testServer.executeOperation({
-    query: "query AllTravelers { allTravelers { name } }",
-    // variables: { name: "world" },
+    query:
+      "query AllTravelers($overAge: Int!) { allTravelers(overAge: $overAge) { name } }",
+    variables: { overAge: 30 },
   });
-
   assertEquals(response.body.kind, "single");
   if (response.body.kind === "single") {
     assertEquals(response.body.singleResult.errors, undefined);
@@ -48,19 +50,26 @@ Deno.test("returns travelers names", async () => {
       NAME
     );
   }
+  assertSpyCalls(travelersFromDBSpy, 1);
+  assertSpyCall(travelersFromDBSpy, 0, {
+    args: [{ overAge: 30 }],
+    returned: [{ id: 2, name: NAME }],
+  });
   testServer.stop();
 });
-Deno.test("GraphQL Hello Query", async () => {
-  // Start the Apollo Server on a random port
-  // const { url } = await server.listen({ port: 0 });
+// Deno.test("GraphQL Hello Query", async () => {
+//   // Start the Apollo Server on a random port
+//   // const { url } = await server.listen({ port: 0 });
 
-  const response = await fetch("http://0.0.0.0:4001/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query: "{ allTravelers { id } }" }),
-  });
+//   const response = await fetch("http://0.0.0.0:4001/", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ query: "{ allTravelers(overAge: 30) { id } }" }),
+//   });
 
-  const result = await response.json();
+//   const result = await response.json();
 
-  assertEquals(result.data.allTravelers[0].id, "1");
-});
+//   console.log(result);
+
+//   assertEquals(result.data.allTravelers[0].id, "1");
+// });

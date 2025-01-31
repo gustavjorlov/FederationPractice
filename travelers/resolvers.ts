@@ -28,7 +28,9 @@ export const travelers: Array<Traveler> = [
 
 export const resolvers = {
   Query: {
-    allTravelers: () => travelers,
+    allTravelers: (context: any, args: any) => {
+      return travelers.filter((t) => t.age > args.overAge);
+    },
   },
   Traveler: {
     favourite_location: (context: Traveler) => {
