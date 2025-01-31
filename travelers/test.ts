@@ -9,7 +9,7 @@ import { Traveler, travelers } from "./resolvers.ts";
 
 const decoder = new TextDecoder("utf-8");
 const fileData = Deno.readFileSync("schema.graphql");
-const typeDefs2 = parse(decoder.decode(fileData));
+const typeDefs = parse(decoder.decode(fileData));
 
 const resolvers = {
   Query: {
@@ -20,7 +20,7 @@ const resolvers = {
 Deno.test("returns hello with the provided name", async () => {
   const testServer = new ApolloServer({
     schema: buildSubgraphSchema({
-      typeDefs: typeDefs2,
+      typeDefs,
       resolvers,
     }),
   });
@@ -30,11 +30,6 @@ Deno.test("returns hello with the provided name", async () => {
     // variables: { name: "world" },
   });
 
-  // console.log(JSON.stringify(response.body.singleResult.data, null, 2));
-
-  // Note the use of Node's assert rather than Jest's expect; if using
-  // TypeScript, `assert`` will appropriately narrow the type of `body`
-  // and `expect` will not.
   assertEquals(response.body.kind, "single");
   if (response.body.kind === "single") {
     assertEquals(response.body.singleResult.errors, undefined);
