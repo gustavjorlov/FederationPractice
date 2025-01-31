@@ -1,0 +1,15 @@
+services:
+  router:
+    image: ghcr.io/apollographql/router:v1.53.0
+    container_name: router
+    ports:
+      - 4000:4000
+    volumes:
+      - ./superschema.graphql:/dist/schema/local.graphql
+      - ./router-config.yaml:/dist/config/router.yaml
+    networks:
+      - federation_network
+    command: --supergraph=schema/local.graphql --dev
+
+networks:
+  federation_network:

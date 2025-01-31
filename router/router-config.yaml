@@ -1,0 +1,14 @@
+sandbox:
+  enabled: true
+homepage:
+  enabled: false
+supergraph:
+  introspection: true
+  listen: 0.0.0.0:4000
+include_subgraph_errors:
+  all: true
+headers:
+  all:
+      request:
+        - propagate:
+            matching: .*

@@ -1,0 +1,13 @@
+{
+  "name": "router",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compose": "npx -p @apollo/rover rover supergraph compose --config ./supergraph-config.yaml --elv2-license=accept > superschema.graphql",
+    "start": "docker-compose up --build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

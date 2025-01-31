@@ -1,0 +1,20 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@interfaceObject"]
+  )
+
+type Location @key(fields: "id") {
+  id: ID!
+}
+
+type Traveler {
+  id: ID
+  name: String
+  age: Int
+  favourite_location: Location
+}
+
+type Query {
+  allTravelers: [Traveler]
+}

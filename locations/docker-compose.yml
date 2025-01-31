@@ -1,0 +1,15 @@
+services:
+  locations:
+    container_name: locations_subgraph
+    image: denoland/deno:alpine-2.1.9
+    ports:
+      - "4002:4002"
+    volumes:
+      - ./:/usr/app
+    networks:
+      - router_federation_network
+    command: sh -c "cd /usr/app && deno -A index.ts"
+
+networks:
+  router_federation_network:
+    external: true
