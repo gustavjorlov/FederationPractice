@@ -1,11 +1,11 @@
-type Traveler = {
+export type Traveler = {
   id: number;
   name: string;
   age: number;
   favourite_location: number;
 };
 
-const travelers: Array<Traveler> = [
+export const travelers: Array<Traveler> = [
   {
     id: 1,
     name: "Gustav",
@@ -31,7 +31,7 @@ export const resolvers = {
     allTravelers: () => travelers,
   },
   Traveler: {
-    favourite_location: (context) => {
+    favourite_location: (context: Traveler) => {
       return { id: context.favourite_location };
     },
   },
