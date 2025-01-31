@@ -17,11 +17,20 @@ const resolvers = {
   },
 };
 
-Deno.test("returns hello with the provided name", async () => {
+Deno.test("returns travelers names", async () => {
+  const NAME = "Gustav";
+  const mocks = {
+    Query: () => ({
+      allTravelers: () => [{ id: 2, name: NAME }],
+    }),
+  };
   const testServer = new ApolloServer({
-    schema: buildSubgraphSchema({
-      typeDefs,
-      resolvers,
+    schema: addMocksToSchema({
+      schema: buildSubgraphSchema({
+        typeDefs,
+        resolvers,
+      }),
+      mocks,
     }),
   });
 
@@ -36,7 +45,7 @@ Deno.test("returns hello with the provided name", async () => {
     assertEquals(
       (response.body.singleResult.data?.allTravelers as Array<Traveler>)[0]
         .name,
-      "Gustav"
+      NAME
     );
   }
   testServer.stop();
