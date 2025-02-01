@@ -61,7 +61,7 @@ type Query
   @join__type(graph: TRAVELERS)
 {
   allLocations: [Location] @join__field(graph: LOCATIONS)
-  allTravelers: [Traveler] @join__field(graph: TRAVELERS)
+  allTravelers(overAge: Int!): [Traveler] @join__field(graph: TRAVELERS)
 }
 
 type Traveler

@@ -2,6 +2,7 @@ export type Traveler = {
   id: number;
   name: string;
   age: number;
+  icecream_taste: string;
   favourite_location: number;
 };
 
@@ -11,18 +12,21 @@ export const travelers: Array<Traveler> = [
     name: "Gustav",
     age: 36,
     favourite_location: 1,
+    icecream_taste: "Chocolate",
   },
   {
     id: 2,
     name: "Sofia",
     age: 36,
     favourite_location: 1,
+    icecream_taste: "Lemon",
   },
   {
     id: 3,
     name: "Fredrik",
     age: 27,
     favourite_location: 2,
+    icecream_taste: "Mint",
   },
 ];
 
