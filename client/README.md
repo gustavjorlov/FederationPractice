@@ -1,5 +1,47 @@
 # React + TypeScript + Vite
 
+## Adding New GraphQL Queries
+
+To add new GraphQL queries to the application:
+
+1. Define your query in `src/graphql/operations.graphql`:
+   ```graphql
+   query YourNewQuery($param: Type!) {
+     queryField(param: $param) {
+       field1
+       field2
+       nestedField {
+         subField
+       }
+     }
+   }
+   ```
+
+2. Generate TypeScript types and hooks:
+   ```bash
+   npm run codegen
+   ```
+   This will:
+   - Read the schema from `router/superschema.graphql`
+   - Generate TypeScript types for your query
+   - Create a React hook (e.g., `useYourNewQueryQuery`)
+   - Output everything to `src/generated/graphql.ts`
+
+3. Use the generated hook in your components:
+   ```typescript
+   import { useYourNewQueryQuery } from '../generated/graphql';
+
+   function YourComponent() {
+     const { data, loading, error } = useYourNewQueryQuery({
+       variables: {
+         param: value
+       }
+     });
+   }
+   ```
+
+The codegen configuration (`codegen.ts`) automatically generates TypeScript types and React hooks for all queries defined in `.graphql` files under the `src` directory.
+
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
 Currently, two official plugins are available:
