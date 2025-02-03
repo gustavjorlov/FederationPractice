@@ -31,7 +31,7 @@ export const travelers: Array<Traveler> = [
 
 export const resolvers = {
   Query: {
-    allTravelers: (context: any, args: any) => {
+    allTravelers: (_context: any, args: any) => {
       return travelers.filter((t) => t.age > args.overAge);
     },
   },
