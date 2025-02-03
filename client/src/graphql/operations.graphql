@@ -2,6 +2,11 @@ query GetAllLocations {
   allLocations {
     id
     name
+    allVisitors {
+      name
+      id
+      age
+    }
     coordinate {
       lat
       lon

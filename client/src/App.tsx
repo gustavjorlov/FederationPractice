@@ -36,7 +36,8 @@ const App: FC = () => {
             location && (
               <li key={location.id}>
                 {location.name} ({location.coordinate?.lat},{" "}
-                {location.coordinate?.lon})
+                {location.coordinate?.lon}) - Unique visitors:{" "}
+                {location?.allVisitors?.length || 0}
               </li>
             )
         )}

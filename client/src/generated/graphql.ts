@@ -27,8 +27,9 @@ export type LatLon = {
 
 export type Location = {
   __typename?: 'Location';
+  allVisitors?: Maybe<Array<Maybe<Traveler>>>;
   coordinate?: Maybe<LatLon>;
-  id: Scalars['ID']['output'];
+  id?: Maybe<Scalars['ID']['output']>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -66,14 +67,14 @@ export enum Link__Purpose {
 export type GetAllLocationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllLocationsQuery = { __typename?: 'Query', allLocations?: Array<{ __typename?: 'Location', id: string, name?: string | null, coordinate?: { __typename?: 'LatLon', lat?: number | null, lon?: number | null } | null } | null> | null };
+export type GetAllLocationsQuery = { __typename?: 'Query', allLocations?: Array<{ __typename?: 'Location', id?: string | null, name?: string | null, allVisitors?: Array<{ __typename?: 'Traveler', name?: string | null, id?: string | null, age?: number | null } | null> | null, coordinate?: { __typename?: 'LatLon', lat?: number | null, lon?: number | null } | null } | null> | null };
 
 export type GetAllTravelersQueryVariables = Exact<{
   overAge: Scalars['Int']['input'];
 }>;
 
 
-export type GetAllTravelersQuery = { __typename?: 'Query', allTravelers?: Array<{ __typename?: 'Traveler', id?: string | null, name?: string | null, age?: number | null, favourite_location?: { __typename?: 'Location', id: string, name?: string | null, coordinate?: { __typename?: 'LatLon', lat?: number | null, lon?: number | null } | null } | null } | null> | null };
+export type GetAllTravelersQuery = { __typename?: 'Query', allTravelers?: Array<{ __typename?: 'Traveler', name?: string | null, id?: string | null, age?: number | null, favourite_location?: { __typename?: 'Location', id?: string | null, name?: string | null, coordinate?: { __typename?: 'LatLon', lat?: number | null, lon?: number | null } | null } | null } | null> | null };
 
 
 export const GetAllLocationsDocument = gql`
@@ -81,6 +82,11 @@ export const GetAllLocationsDocument = gql`
   allLocations {
     id
     name
+    allVisitors {
+      name
+      id
+      age
+    }
     coordinate {
       lat
       lon
@@ -123,8 +129,8 @@ export type GetAllLocationsQueryResult = Apollo.QueryResult<GetAllLocationsQuery
 export const GetAllTravelersDocument = gql`
     query GetAllTravelers($overAge: Int!) {
   allTravelers(overAge: $overAge) {
-    id
     name
+    id
     age
     favourite_location {
       id

@@ -1,5 +1,5 @@
 const config = {
-  schema: '../router/superschema.graphql',
+  schema: '../servers/router/superschema.graphql',
   documents: ['src/**/*.graphql'],
   generates: {
     './src/generated/graphql.ts': {
