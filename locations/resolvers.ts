@@ -24,8 +24,9 @@ export const resolvers = {
   Query: {
     allLocations: () => locations,
   },
-  Location: (context) => {
-    console.log(context);
-    return locations.find((location) => location.id === context.id);
+  Location: {
+    __resolveReference: (context: { id: string }) => {
+      return locations.find((location) => location.id === Number(context.id));
+    },
   },
 };

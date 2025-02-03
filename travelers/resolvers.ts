@@ -3,7 +3,7 @@ export type Traveler = {
   name: string;
   age: number;
   icecream_taste: string;
-  favourite_location: number;
+  favourite_location?: number;
 };
 
 export const travelers: Array<Traveler> = [
@@ -18,7 +18,6 @@ export const travelers: Array<Traveler> = [
     id: 2,
     name: "Sofia",
     age: 36,
-    favourite_location: 1,
     icecream_taste: "Lemon",
   },
   {
