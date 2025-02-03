@@ -8,8 +8,9 @@ services:
       - ./superschema.graphql:/dist/schema/local.graphql
       - ./router-config.yaml:/dist/config/router.yaml
     networks:
-      - federation_network
+      - router_federation_network
     command: --supergraph=schema/local.graphql --dev
 
 networks:
-  federation_network:
+  router_federation_network:
+    external: true
