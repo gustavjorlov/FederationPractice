@@ -51,7 +51,7 @@ type Location
   @join__type(graph: LOCATIONS, key: "id")
   @join__type(graph: TRAVELERS, key: "id")
 {
-  id: ID!
+  id: ID
   name: String @join__field(graph: LOCATIONS)
   coordinate: LatLon @join__field(graph: LOCATIONS)
 }

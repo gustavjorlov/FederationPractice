@@ -5,7 +5,7 @@ extend schema
   )
 
 type Location @key(fields: "id") {
-  id: ID!
+  id: ID
 }
 
 type Traveler {

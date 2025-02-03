@@ -10,7 +10,7 @@ type LatLon {
 }
 
 type Location @key(fields: "id") {
-  id: ID!
+  id: ID
   name: String
   coordinate: LatLon
 }

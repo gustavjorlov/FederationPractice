@@ -7,15 +7,24 @@ import {
 } from "./generated/graphql.ts";
 
 const App: FC = () => {
-  const { data: locationsData, loading: locationsLoading } =
-    useGetAllLocationsQuery();
-  const { data: travelersData, loading: travelersLoading } =
-    useGetAllTravelersQuery({
-      variables: { overAge: 18 },
-    });
+  const {
+    data: locationsData,
+    loading: locationsLoading,
+    error: locationsError,
+  } = useGetAllLocationsQuery();
+  const {
+    data: travelersData,
+    loading: travelersLoading,
+    error: travelersError,
+  } = useGetAllTravelersQuery({
+    variables: { overAge: 18 },
+  });
 
   if (locationsLoading || travelersLoading) {
     return <div>Loading...</div>;
+  }
+  if (locationsError || travelersError) {
+    return <div>Error...</div>;
   }
 
   return (
