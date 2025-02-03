@@ -11,8 +11,8 @@ query GetAllLocations {
 
 query GetAllTravelers($overAge: Int!) {
   allTravelers(overAge: $overAge) {
-    id
     name
+    id
     age
     favourite_location {
       id
