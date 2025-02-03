@@ -1,0 +1,26 @@
+query GetAllLocations {
+  allLocations {
+    id
+    name
+    coordinate {
+      lat
+      lon
+    }
+  }
+}
+
+query GetAllTravelers($overAge: Int!) {
+  allTravelers(overAge: $overAge) {
+    id
+    name
+    age
+    favourite_location {
+      id
+      name
+      coordinate {
+        lat
+        lon
+      }
+    }
+  }
+}

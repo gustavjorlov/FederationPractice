@@ -1,69 +1,40 @@
-import React from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-  useQuery,
-} from "@apollo/client";
-import "./App.css";
+import React, { FC } from 'react';
+import { useGetAllLocationsQuery, useGetAllTravelersQuery, Location, Traveler } from './generated/graphql.ts';
 
-const client = new ApolloClient({
-  uri: "http://localhost:4000/",
-  cache: new InMemoryCache(),
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: "network-only",
-    },
-    query: {
-      fetchPolicy: "network-only",
-    },
-  },
-});
-
-const GET_LOCATIONS = gql`
-  query GetLocations {
-    allLocations {
-      id
-      name
-      coordinate {
-        lat
-        lon
-      }
-    }
-  }
-`;
-
-function LocationsList() {
-  const { loading, error, data, refetch } = useQuery(GET_LOCATIONS, {
-    fetchPolicy: "network-only",
+const App: FC = () => {
+  const { data: locationsData, loading: locationsLoading } = useGetAllLocationsQuery();
+  const { data: travelersData, loading: travelersLoading } = useGetAllTravelersQuery({
+    variables: { overAge: 18 }
   });
+
+  if (locationsLoading || travelersLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <button onClick={() => refetch()}>Fetch Locations</button>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-      {data && (
-        <div>
-          <h2>Locations:</h2>
-          <pre>{JSON.stringify(data.allLocations, null, 2)}</pre>
-        </div>
-      )}
+      <h2>Locations</h2>
+      <ul>
+        {locationsData?.allLocations?.map((location: Location | null) => location && (
+          <li key={location.id}>
+            {location.name} ({location.coordinate?.lat}, {location.coordinate?.lon})
+          </li>
+        ))}
+      </ul>
+
+      <h2>Travelers (Over 18)</h2>
+      <ul>
+        {travelersData?.allTravelers?.map((traveler: Traveler | null) => traveler && (
+          <li key={traveler.id}>
+            {traveler.name} (Age: {traveler.age})
+            {traveler.favourite_location && (
+              <div>Favorite Location: {traveler.favourite_location.name}</div>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
-
-function App() {
-  return (
-    <ApolloProvider client={client}>
-      <div>
-        <h1>Federation Practice</h1>
-        <p>GraphQL Federation Demo</p>
-        <LocationsList />
-      </div>
-    </ApolloProvider>
-  );
-}
+};
 
 export default App;
